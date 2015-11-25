@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D733B840-12B8-4DF0-BC5D-9E067034DCC7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>project</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E46D9BAFD28140037E16B5FEECADD1AB8B4F9DEE</key>
+		<string>github.com:joshsilverman/Dijkstra.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>cosi180.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E46D9BAFD28140037E16B5FEECADD1AB8B4F9DEE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:joshsilverman/Dijkstra.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E46D9BAFD28140037E16B5FEECADD1AB8B4F9DEE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E46D9BAFD28140037E16B5FEECADD1AB8B4F9DEE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cosi180</string>
+		</dict>
+	</array>
+</dict>
+</plist>
