@@ -36,25 +36,34 @@ void PrintLeg(int edge);
 /*HEAP DATA STRUCTURE                                                                  */
 /***************************************************************************************/
 
-struct heap heap_init(int max_size);
-void heap_insert(int d, struct heap H);
-
-struct heap{
+typedef struct {
     unsigned int size;
     unsigned int count;
-    int *A;
-};
+    int A[10];
+} Heap;
 
-struct heap heap_init(int max_size) {
-    struct heap H;
+Heap heap_init(int max_size);
+void heap_insert(int d, Heap H);
+
+Heap heap_init(int max_size) {
+    Heap H;
     H.size = max_size;
     H.count = 0;
     
     return H;
 };
 
-void heap_insert(int d, struct heap H){
+void heap_insert(int d, Heap H){
+    printf("insert: %i\n", d);
+    H.A[H.count] = d;
+    H.count++;
+    
+    printf("value at location %i is %i\n", H.count-1, d);
 };
+
+void heap_percup(int i, Heap H) {
+    
+}
 
 /***************************************************************************************/
 /*Dijkstra Algorithm                                                                   */
@@ -76,8 +85,9 @@ void Dijkstra(int DijkstraFlag) {
 /***************************************************************************************/
 int main() {
     
-    struct heap H = heap_init(1);
+    Heap H = heap_init(1);
     heap_insert(10, H);
+    
 /* GetVertices();*/
 /* GetEdges();*/
 /* while (GetRequest()) {RouteOpen(); TourFlag ? Tour() : Dijkstra(0); RouteClose();}*/
