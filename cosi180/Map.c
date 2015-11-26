@@ -39,7 +39,7 @@ void PrintLeg(int edge);
 typedef struct {
     unsigned int size;
     unsigned int count;
-    unsigned int A[10];
+    unsigned int *A;
 } Heap;
 
 Heap* heap_init(int max_size);
@@ -47,33 +47,41 @@ void heap_insert(int d, Heap *H);
 void heap_percup(unsigned int i, Heap *H);
 unsigned int heap_parent(int i, Heap *H);
 void heap_swap(int i, int j, Heap *H);
+void heap_grow(Heap *H);
+void heap_print(Heap *H);
 
-Heap* heap_init(int max_size) {
+Heap* heap_init() {
     Heap *H = malloc(sizeof(Heap));
-    (*H).size = max_size;
+    (*H).size = 2;
+    (*H).A = (unsigned int *)malloc((*H).size * sizeof(unsigned int));
     (*H).count = 0;
     
     return H;
 };
 
-void heap_insert(int d, Heap *H){
+void heap_insert(int d, Heap *H) {
+    printf("\n\ninserting %d\n", d);
+    if ((*H).count >= (*H).size) {
+        heap_grow(H);
+    }
+    
     (*H).A[(*H).count] = d;
-    printf("%2d\n", (*H).A[(*H).count]);
     heap_percup((*H).count, H);
     (*H).count = (*H).count + 1;
     
-    printf("value at location %i is %i\n", (*H).count-1, d);
+    heap_print(H);
 };
 
 void heap_percup(unsigned int i, Heap *H) {
     unsigned int parent_i = heap_parent(i, H);
-    printf("parent 0: %2d\n", parent_i);
     while ((*H).A[parent_i] > (*H).A[i]) {
         heap_swap(i, parent_i, H);
+        i = parent_i;
+        parent_i = heap_parent(i, H);
     }
 }
 
-unsigned int heap_parent(int i, Heap *H){
+unsigned int heap_parent(int i, Heap *H) {
     if (i == 0) {
         return i;
     } else {
@@ -81,11 +89,32 @@ unsigned int heap_parent(int i, Heap *H){
     };
 };
 
-void heap_swap(int i, int j, Heap *H){
+void heap_swap(int i, int j, Heap *H) {
     printf("swap: %2d and %2d\n", (*H).A[i], (*H).A[j]);
     int tmp = (*H).A[i];
     (*H).A[i] = (*H).A[j];
     (*H).A[j] = tmp;
+};
+
+void heap_grow(Heap *H) {
+    printf("resize\n");
+    (*H).size = (*H).size * 2;
+    unsigned int *tmpArray;
+    tmpArray = (unsigned int *)malloc((*H).size * sizeof(unsigned int));
+    
+    for (int i=0; i<(*H).count; i++) {
+        tmpArray[i] = (*H).A[i];
+    };
+    
+    free((*H).A);
+    (*H).A = tmpArray;
+};
+
+void heap_print(Heap *H) {
+    printf("\n");
+    for (int i=0; i<(*H).size; i++) {
+        printf("at %i: %2d\n", i, (*H).A[i]);
+    };
 };
 
 /***************************************************************************************/
@@ -111,18 +140,14 @@ int main() {
     Heap *H = heap_init(1);
     
     heap_insert(10, H);
-    printf("at 0: %2d\n", (*H).A[0]);
-    
     heap_insert(8, H);
     heap_insert(11, H);
     heap_insert(24, H);
-
-    printf("count: %2d\n", (*H).count);
+    heap_insert(14, H);
+    heap_insert(16, H);
+    heap_insert(2, H);
+    heap_insert(1, H);
     
-    printf("at 0: %2d\n", (*H).A[0]);
-    printf("at 1: %2d\n", (*H).A[1]);
-    printf("at 1: %2d\n", (*H).A[3]);
-    printf("at 1: %2d\n", (*H).A[4]);
     
 /* GetVertices();*/
 /* GetEdges();*/
