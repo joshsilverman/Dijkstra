@@ -45,10 +45,13 @@ typedef struct {
 Heap* heap_init(int max_size);
 void heap_insert(int d, Heap *H);
 void heap_percup(unsigned int i, Heap *H);
-unsigned int heap_parent(int i, Heap *H);
+void heap_percdown(unsigned int i, Heap *H);
+unsigned int heap_parent(unsigned int i, Heap *H);
+unsigned int heap_child(unsigned int i, Heap *H);
 void heap_swap(int i, int j, Heap *H);
 void heap_grow(Heap *H);
 void heap_print(Heap *H);
+unsigned int heap_deletemin(Heap *H);
 
 Heap* heap_init() {
     Heap *H = malloc(sizeof(Heap));
@@ -72,6 +75,21 @@ void heap_insert(int d, Heap *H) {
     heap_print(H);
 };
 
+unsigned int heap_deletemin(Heap *H){
+    printf("\n\deletemin\n");
+    if ((*H).count > 0) {
+        heap_swap(0, (*H).count-1, H);
+        (*H).count = (*H).count-1;
+        unsigned int min = (*H).A[(*H).count];
+        (*H).A[(*H).count] = 0;
+        heap_percdown(0, H);
+        
+        return min;
+    } else {
+        return -1;
+    }
+};
+
 void heap_percup(unsigned int i, Heap *H) {
     unsigned int parent_i = heap_parent(i, H);
     while ((*H).A[parent_i] > (*H).A[i]) {
@@ -81,11 +99,40 @@ void heap_percup(unsigned int i, Heap *H) {
     }
 }
 
-unsigned int heap_parent(int i, Heap *H) {
+void heap_percdown(unsigned int i, Heap *H) {
+    printf("\nheap_percdown\n");
+    unsigned int child_i = heap_child(i, H);
+    while ((*H).A[child_i] < (*H).A[i]) {
+        heap_swap(i, child_i, H);
+        i = child_i;
+        child_i = heap_child(i, H);
+    }
+}
+
+unsigned int heap_parent(unsigned int i, Heap *H) {
     if (i == 0) {
         return i;
     } else {
         return (unsigned int)(round((float)i/2.0f) - 1);
+    };
+};
+
+unsigned int heap_child(unsigned int i, Heap *H) {
+    unsigned int lchild_index = (unsigned int)(round((float)i*2.0f) + 1);
+    unsigned int rchild_index = (unsigned int)(round((float)i*2.0f) + 2);
+    unsigned int child_index;
+    
+    if ((*H).A[lchild_index] < (*H).A[rchild_index]) {
+        child_index = lchild_index;
+    } else {
+        child_index = rchild_index;
+    }
+    
+    printf("\nchild of %d is %d\n", i, child_index);
+    if (child_index >= (*H).count) {
+        return i;
+    } else {
+        return child_index;
     };
 };
 
@@ -143,11 +190,16 @@ int main() {
     heap_insert(8, H);
     heap_insert(11, H);
     heap_insert(24, H);
-    heap_insert(14, H);
-    heap_insert(16, H);
-    heap_insert(2, H);
-    heap_insert(1, H);
+    heap_insert(7, H);
+    heap_insert(111, H);
+    heap_insert(4, H);
     
+    
+    heap_print(H);
+    printf("min: %d\n", heap_deletemin(H));
+    heap_print(H);
+    printf("min: %d\n", heap_deletemin(H));
+    heap_print(H);
     
 /* GetVertices();*/
 /* GetEdges();*/
