@@ -10,42 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "cosi180/Map.c"
-            timestampString = "470074423.686494"
+            timestampString = "470286267.60738"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "cosi180/Map.c"
-            timestampString = "470160891.634877"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "heap_percup()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "cosi180/Map.c"
-            timestampString = "470184410.969118"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "heap_swap()"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "alist_init()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

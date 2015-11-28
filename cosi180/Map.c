@@ -30,7 +30,69 @@ void PrintLeg(int edge);
 /*GRAPH ADJACENCY LIST DATA STRUCTURE                                                  */
 /***************************************************************************************/
 
+typedef struct Edge {
+    int vertex_i;
+    struct Edge *edge;
+} Edge;
 
+typedef struct {
+    int size;
+    Edge *A;
+} AList;
+
+AList* alist_init(int vertex_count);
+void alist_add_edge(int i, int j, AList *alist);
+void alist_print(AList *alist);
+void edge_print(Edge *edge);
+
+AList* alist_init(int vertex_count) {
+    AList *alist = malloc(sizeof(AList));
+    (*alist).size = vertex_count;
+    (*alist).A = malloc((*alist).size * sizeof(Edge));
+    
+    
+    for (int i=0; i < (*alist).size; i++) {
+        Edge edge;
+        edge.vertex_i = -1;
+        edge.edge = NULL;
+        (*alist).A[i] = edge;
+    }
+    
+    return alist;
+};
+
+void alist_add_edge(int i, int j, AList *alist) {
+    printf("Adding edge %i -> %i\n", i, j);
+    Edge edge;
+    edge.vertex_i = j;
+    edge.edge = NULL;
+    (*alist).A[i] = edge;
+    (*alist).A[i].edge = NULL;
+};
+
+void alist_print(AList *alist) {
+    for (int i = 0; i < (*alist).size; i++) {
+        printf("index: %i", i);
+        edge_print(&(*alist).A[i]);
+        printf("\n");
+    }
+};
+
+void edge_print(Edge *edge) {
+    if (!edge || (*edge).vertex_i == -1) {
+        return;
+    } else {
+        while (edge) {
+            printf("->%i", (*edge).vertex_i);
+            
+            if ((*edge).edge) {
+                edge = (*edge).edge;
+            } else {
+                edge = NULL;
+            }
+        }
+    }
+};
 
 /***************************************************************************************/
 /*HEAP DATA STRUCTURE                                                                  */
@@ -42,7 +104,7 @@ typedef struct {
     unsigned int *A;
 } Heap;
 
-Heap* heap_init(int max_size);
+Heap* heap_init();
 void heap_insert(int d, Heap *H);
 void heap_percup(unsigned int i, Heap *H);
 void heap_percdown(unsigned int i, Heap *H);
@@ -75,8 +137,8 @@ void heap_insert(int d, Heap *H) {
     heap_print(H);
 };
 
-unsigned int heap_deletemin(Heap *H){
-    printf("\n\deletemin\n");
+unsigned int heap_deletemin(Heap *H) {
+    printf("\ndeletemin\n");
     if ((*H).count > 0) {
         heap_swap(0, (*H).count-1, H);
         (*H).count = (*H).count-1;
@@ -184,7 +246,7 @@ void Dijkstra(int DijkstraFlag) {
 /***************************************************************************************/
 int main() {
     
-    Heap *H = heap_init(1);
+    /*Heap *H = heap_init();
     
     heap_insert(10, H);
     heap_insert(8, H);
@@ -199,7 +261,11 @@ int main() {
     printf("min: %d\n", heap_deletemin(H));
     heap_print(H);
     printf("min: %d\n", heap_deletemin(H));
-    heap_print(H);
+    heap_print(H);*/
+    
+    AList *alist = alist_init(10);
+    alist_add_edge(1, 2, alist);
+    alist_print(alist);
     
 /* GetVertices();*/
 /* GetEdges();*/
