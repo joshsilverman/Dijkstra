@@ -42,6 +42,7 @@ typedef struct {
 
 AList* alist_init(int vertex_count);
 void alist_add_edge(int i, int j, AList *alist);
+void _alist_add_edge(int i, int j, AList *alist);
 void alist_print(AList *alist);
 void edge_print(Edge *edge);
 
@@ -62,12 +63,26 @@ AList* alist_init(int vertex_count) {
 };
 
 void alist_add_edge(int i, int j, AList *alist) {
+    _alist_add_edge(i, j, alist);
+    _alist_add_edge(j, i, alist);
+};
+
+void _alist_add_edge(int i, int j, AList *alist) {
     printf("Adding edge %i -> %i\n", i, j);
-    Edge edge;
-    edge.vertex_i = j;
-    edge.edge = NULL;
-    (*alist).A[i] = edge;
-    (*alist).A[i].edge = NULL;
+    
+    Edge *outgoing_edge = &(*alist).A[i];
+    while ((*outgoing_edge).edge) {
+        outgoing_edge = (*outgoing_edge).edge;
+    }
+    
+    if ((*outgoing_edge).vertex_i == -1) {
+        (*outgoing_edge).vertex_i = j;
+    } else {
+        Edge *edge = malloc(sizeof(Edge));
+        (*edge).vertex_i = j;
+        (*edge).edge = NULL;
+        (*outgoing_edge).edge = edge;
+    }
 };
 
 void alist_print(AList *alist) {
@@ -265,6 +280,7 @@ int main() {
     
     AList *alist = alist_init(10);
     alist_add_edge(1, 2, alist);
+    alist_add_edge(1, 4, alist);
     alist_print(alist);
     
 /* GetVertices();*/
