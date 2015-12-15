@@ -110,15 +110,16 @@ void edge_print(Edge *edge) {
 /***************************************************************************************/
 
 typedef struct {
-    int d;                /*The value of the heap item to partially sort on*/
-    int v_index; /*A reference to the index of the vertex stored in heap item*/
+    int d;                  /*The value of the heap item to partially sort on*/
+    int v_index;            /*A reference to the index of the vertex stored in heap item*/
     unsigned int marked;
 } HeapItem;
 
 typedef struct {
     unsigned int size;
     unsigned int count;
-    HeapItem *A;
+    HeapItem *A;            /*The heap array*/
+    int *D;                 /*An array of pointers mapping v_index to the HeapItem*/
 } Heap;
 
 Heap* heap_init();
@@ -135,9 +136,10 @@ void heap_item_copy(HeapItem *a, HeapItem *b);
 
 Heap* heap_init() {
     Heap *H = malloc(sizeof(Heap));
-    (*H).size = 0;
-    (*H).A = (HeapItem *)malloc((*H).size * sizeof(HeapItem));
-    (*H).count = 0;
+    H->size = 0;
+    H->A = (HeapItem *)malloc(H->size * sizeof(HeapItem));
+    H->D = malloc(H->size * sizeof(int));
+    H->count = 0;
     
     return H;
 };
@@ -150,13 +152,14 @@ void heap_item_copy(HeapItem *a, HeapItem *b) {
 
 void heap_insert(HeapItem *item, Heap *H) {
     printf("\n\ninserting %d\n", item->d);
-    if ((*H).count >= (*H).size) {
+    if (H->count >= H->size) {
         heap_grow(H);
     }
     
-    (*H).A[(*H).count] = *item;
-    heap_percup((*H).count, H);
-    (*H).count = (*H).count + 1;
+    H->A[H->count] = *item;
+    H->D[item->v_index] = H->count;
+    heap_percup(H->count, H);
+    H->count = H->count + 1;
     
     /*heap_print(H);*/
 };
@@ -164,17 +167,17 @@ void heap_insert(HeapItem *item, Heap *H) {
 unsigned int heap_deletemin(Heap *H, HeapItem *min) {
     printf("\ndeletemin\n");
     
-    if ((*H).count > 0) {
-        heap_swap(0, (*H).count-1, H);
-        (*H).count = (*H).count-1;
+    if (H->count > 0) {
+        heap_swap(0, H->count-1, H);
+        H->count = H->count-1;
         
-        min->d = (*H).A[(*H).count].d;
-        min->v_index = (*H).A[(*H).count].v_index;
-        min->marked = (*H).A[(*H).count].marked;
+        min->d = H->A[H->count].d;
+        min->v_index = H->A[H->count].v_index;
+        min->marked = H->A[H->count].marked;
         
-        (*H).A[(*H).count].d = -1;
-        (*H).A[(*H).count].v_index = -1;
-        (*H).A[(*H).count].marked = 0;
+        H->A[H->count].d = -1;
+        H->A[H->count].v_index = -1;
+        H->A[H->count].marked = 0;
         
         heap_percdown(0, H);
         
@@ -186,7 +189,7 @@ unsigned int heap_deletemin(Heap *H, HeapItem *min) {
 
 void heap_percup(unsigned int i, Heap *H) {
     unsigned int parent_i = heap_parent(i, H);
-    while ((*H).A[parent_i].d > (*H).A[i].d) {
+    while (H->A[parent_i].d > H->A[i].d) {
         heap_swap(i, parent_i, H);
         i = parent_i;
         parent_i = heap_parent(i, H);
@@ -196,7 +199,7 @@ void heap_percup(unsigned int i, Heap *H) {
 void heap_percdown(unsigned int i, Heap *H) {
     printf("\nheap_percdown\n");
     unsigned int child_i = heap_child(i, H);
-    while ((*H).A[child_i].d < (*H).A[i].d) {
+    while (H->A[child_i].d < H->A[i].d) {
         heap_swap(i, child_i, H);
         i = child_i;
         child_i = heap_child(i, H);
@@ -216,7 +219,7 @@ unsigned int heap_child(unsigned int i, Heap *H) {
     unsigned int rchild_index = (unsigned int)(round((float)i*2.0f) + 2);
     unsigned int child_index;
     
-    if ((*H).A[lchild_index].d < (*H).A[rchild_index].d) {
+    if (H->A[lchild_index].d < (*H).A[rchild_index].d) {
         child_index = lchild_index;
     } else {
         child_index = rchild_index;
@@ -231,39 +234,44 @@ unsigned int heap_child(unsigned int i, Heap *H) {
 };
 
 void heap_swap(int i, int j, Heap *H) {
-    printf("swap: %2d and %2d\n", (*H).A[i].d, (*H).A[j].d);
+    printf("swap: %2d and %2d\n", H->A[i].d, H->A[j].d);
+    
     HeapItem *tmp = malloc(sizeof(HeapItem));
-    heap_item_copy(tmp, &(*H).A[i]);
-    (*H).A[i] = (*H).A[j];
-    (*H).A[j] = *tmp;
+    heap_item_copy(tmp, &H->A[i]);
+    H->A[i] = H->A[j];
+    H->A[j] = *tmp;
+    
+    H->D[H->A[i].v_index] = i;
+    H->D[H->A[j].v_index] = j;
 };
 
 void heap_grow(Heap *H) {
     printf("resize\n");
-    (*H).size = ((*H).size + 1) * 2;
-    HeapItem *tmpArray;
-    tmpArray = (HeapItem *)malloc((*H).size * sizeof(HeapItem));
+    H->size = (H->size + 1) * 2;
+    HeapItem *newA;
+    int *newD;
+    newA = (HeapItem *)malloc(H->size * sizeof(HeapItem));
+    newD = malloc(H->size * sizeof(int));
     
     int i;
-    for (i=0; i<(*H).count; i++) {
-        tmpArray[i] = (*H).A[i];
+    for (i=0; i<H->count; i++) {
+        newA[i] = H->A[i];
+        newD[H->A[i].v_index] = i;
     };
     
-    for (i=(*H).count; i<(*H).size; i++) {
+    for (i=H->count; i<H->size; i++) {
         HeapItem *item = malloc(sizeof(HeapItem));
         item->d = -1;
         item->v_index = -1;
         item->marked = 0;
         
-        tmpArray[i] = *item;
-        
-        /*tmpArray[i].d = -1;
-        tmpArray[i].v_index = -1;
-        tmpArray[i].marked = 0;*/
+        newA[i] = *item;
     };
     
-    free((*H).A);
-    (*H).A = tmpArray;
+    free(H->A);
+    free(H->D);
+    H->A = newA;
+    H->D = newD;
 };
 
 void heap_print(Heap *H) {
@@ -296,33 +304,36 @@ void Dijkstra(int DijkstraFlag) {
         heap_insert(&item, D);
     }
     
-    printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
+    for (int k=0; k<nV; k++) {
+        printf("A: i of %i points to vertex %i\n", k, D->A[k].v_index);
+        printf("D: i of %i points to vertex %i\n", k, D->D[k]);
+    }
+    
+    /*printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
     HeapItem *min = malloc(sizeof(HeapItem));
     while (heap_deletemin(D, min) > 0) {
         printf("min: %d\n", min->d);
 
-        Edge *edge = &(*alist).A[min->v_index];
-        if (!edge || (*edge).vertex_i == -1) {
-//            return;
+        Edge *edge = &alist->A[min->v_index];
+        if (!edge || edge->vertex_i == -1) {
         } else {
             while (edge) {
-                printf(" -> %i", (*edge).vertex_i);
+                printf(" -> %i", edge->vertex_i);
                 printf("(%i)", EdgeCost(edge->edge_i));
                 
-                /*edge->vertex_i;
+                edge->vertex_i;
                 if (min->d + EdgeCost(edge->edge_i) < ) {
                     
-                }*/
+                }
                 
-                if ((*edge).edge) {
-                    edge = (*edge).edge;
+                if (edge->edge) {
+                    edge = edge->edge;
                 } else {
                     edge = NULL;
                 }
             }
         }
-        
-    }
+    }*/
 }
 
 
