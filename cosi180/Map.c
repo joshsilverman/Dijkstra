@@ -148,7 +148,7 @@ void heap_insert(HeapItem *item, Heap *H) {
     heap_percup((*H).count, H);
     (*H).count = (*H).count + 1;
     
-    heap_print(H);
+    /*heap_print(H);*/
 };
 
 unsigned int heap_deletemin(Heap *H) {
@@ -248,9 +248,6 @@ void heap_print(Heap *H) {
 
 
 void Dijkstra(int DijkstraFlag) {
-    GetVertices();
-    GetEdges();
-    
     /*Load edges into adjacency list*/
     AList *alist = alist_init(nV);
     for (int i=0; i<nE; i++) {
@@ -261,9 +258,12 @@ void Dijkstra(int DijkstraFlag) {
     /*Load dictionary of unmarked vertices*/
     Heap *D = heap_init();
     for (int j=0; j<nV; j++) {
-        HeapItem item = {-1, j};
+        int init_cost = (j == Begin) ? 0 : 1000000;
+        HeapItem item = {init_cost, j};
         heap_insert(&item, D);
     }
+    
+    printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
 }
 
 
@@ -280,7 +280,7 @@ void Dijkstra(int DijkstraFlag) {
 /***************************************************************************************/
 int main() {
     
-    Heap *H = heap_init();
+    /*Heap *H = heap_init();
     
     HeapItem item1 = {10, 0};
     heap_insert(&item1, H);
@@ -308,9 +308,13 @@ int main() {
     printf("min: %d\n", heap_deletemin(H));
     heap_print(H);
     printf("min: %d\n", heap_deletemin(H));
-    heap_print(H);
+    heap_print(H);*/
     
-    /*Dijkstra(0);*/
+    GetVertices();
+    GetEdges();
+    Begin = 66;
+    Finish = 62;
+    Dijkstra(0);
     
     /*GetVertices();
     GetEdges();
