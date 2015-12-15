@@ -108,13 +108,18 @@ void edge_print(Edge *edge) {
 /***************************************************************************************/
 
 typedef struct {
+    int d;                /*The value of the heap item to partially sort on*/
+    unsigned int v_index; /*A reference to the index of the vertex stored in heap item*/
+} HeapItem;
+
+typedef struct {
     unsigned int size;
     unsigned int count;
-    unsigned int *A;
+    HeapItem *A;
 } Heap;
 
 Heap* heap_init();
-void heap_insert(int d, Heap *H);
+void heap_insert(HeapItem *item, Heap *H);
 void heap_percup(unsigned int i, Heap *H);
 void heap_percdown(unsigned int i, Heap *H);
 unsigned int heap_parent(unsigned int i, Heap *H);
@@ -127,19 +132,19 @@ unsigned int heap_deletemin(Heap *H);
 Heap* heap_init() {
     Heap *H = malloc(sizeof(Heap));
     (*H).size = 2;
-    (*H).A = (unsigned int *)malloc((*H).size * sizeof(unsigned int));
+    (*H).A = (HeapItem *)malloc((*H).size * sizeof(HeapItem));
     (*H).count = 0;
     
     return H;
 };
 
-void heap_insert(int d, Heap *H) {
-    printf("\n\ninserting %d\n", d);
+void heap_insert(HeapItem *item, Heap *H) {
+    printf("\n\ninserting %d\n", item->d);
     if ((*H).count >= (*H).size) {
         heap_grow(H);
     }
     
-    (*H).A[(*H).count] = d;
+    (*H).A[(*H).count] = *item;
     heap_percup((*H).count, H);
     (*H).count = (*H).count + 1;
     
@@ -151,8 +156,8 @@ unsigned int heap_deletemin(Heap *H) {
     if ((*H).count > 0) {
         heap_swap(0, (*H).count-1, H);
         (*H).count = (*H).count-1;
-        unsigned int min = (*H).A[(*H).count];
-        (*H).A[(*H).count] = 0;
+        unsigned int min = (*H).A[(*H).count].d;
+        (*H).A[(*H).count].d = 0;
         heap_percdown(0, H);
         
         return min;
@@ -163,7 +168,7 @@ unsigned int heap_deletemin(Heap *H) {
 
 void heap_percup(unsigned int i, Heap *H) {
     unsigned int parent_i = heap_parent(i, H);
-    while ((*H).A[parent_i] > (*H).A[i]) {
+    while ((*H).A[parent_i].d > (*H).A[i].d) {
         heap_swap(i, parent_i, H);
         i = parent_i;
         parent_i = heap_parent(i, H);
@@ -173,7 +178,7 @@ void heap_percup(unsigned int i, Heap *H) {
 void heap_percdown(unsigned int i, Heap *H) {
     printf("\nheap_percdown\n");
     unsigned int child_i = heap_child(i, H);
-    while ((*H).A[child_i] < (*H).A[i]) {
+    while ((*H).A[child_i].d < (*H).A[i].d) {
         heap_swap(i, child_i, H);
         i = child_i;
         child_i = heap_child(i, H);
@@ -193,7 +198,7 @@ unsigned int heap_child(unsigned int i, Heap *H) {
     unsigned int rchild_index = (unsigned int)(round((float)i*2.0f) + 2);
     unsigned int child_index;
     
-    if ((*H).A[lchild_index] < (*H).A[rchild_index]) {
+    if ((*H).A[lchild_index].d < (*H).A[rchild_index].d) {
         child_index = lchild_index;
     } else {
         child_index = rchild_index;
@@ -208,8 +213,8 @@ unsigned int heap_child(unsigned int i, Heap *H) {
 };
 
 void heap_swap(int i, int j, Heap *H) {
-    printf("swap: %2d and %2d\n", (*H).A[i], (*H).A[j]);
-    int tmp = (*H).A[i];
+    printf("swap: %2d and %2d\n", (*H).A[i].d, (*H).A[j].d);
+    HeapItem tmp = (*H).A[i];
     (*H).A[i] = (*H).A[j];
     (*H).A[j] = tmp;
 };
@@ -217,8 +222,8 @@ void heap_swap(int i, int j, Heap *H) {
 void heap_grow(Heap *H) {
     printf("resize\n");
     (*H).size = (*H).size * 2;
-    unsigned int *tmpArray;
-    tmpArray = (unsigned int *)malloc((*H).size * sizeof(unsigned int));
+    HeapItem *tmpArray;
+    tmpArray = (HeapItem *)malloc((*H).size * sizeof(HeapItem));
     
     for (int i=0; i<(*H).count; i++) {
         tmpArray[i] = (*H).A[i];
@@ -231,7 +236,7 @@ void heap_grow(Heap *H) {
 void heap_print(Heap *H) {
     printf("\n");
     for (int i=0; i<(*H).size; i++) {
-        printf("at %i: %2d\n", i, (*H).A[i]);
+        printf("at %i: %2d\n", i, (*H).A[i].d);
     };
 };
 
@@ -240,13 +245,28 @@ void heap_print(Heap *H) {
 /*DijkstraFlag=1 to supress output when Dijkstra is called from tour code.)            */
 /***************************************************************************************/
 
+
+
 void Dijkstra(int DijkstraFlag) {
-    /*GetVertices();
+    GetVertices();
     GetEdges();
     
-    printf("%i\n", nV);
-    printf("%i\n", nE);*/
+    /*Load edges into adjacency list*/
+    AList *alist = alist_init(nV);
+    for (int i=0; i<nE; i++) {
+        alist_add_edge(Estart[i], Eend[i], alist);
+    }
+    alist_print(alist);
+    
+    /*Load dictionary of unmarked vertices*/
+    Heap *D = heap_init();
+    for (int j=0; j<nV; j++) {
+        HeapItem item = {-1, j};
+        heap_insert(&item, D);
+    }
 }
+
+
 
 
 /***************************************************************************************/
@@ -260,35 +280,35 @@ void Dijkstra(int DijkstraFlag) {
 /***************************************************************************************/
 int main() {
     
-    /*Heap *H = heap_init();
+    Heap *H = heap_init();
     
-    heap_insert(10, H);
-    heap_insert(8, H);
-    heap_insert(11, H);
-    heap_insert(24, H);
-    heap_insert(7, H);
-    heap_insert(111, H);
-    heap_insert(4, H);
+    HeapItem item1 = {10, 0};
+    heap_insert(&item1, H);
+    
+    HeapItem item2 = {8, 1};
+    heap_insert(&item2, H);
+    
+    HeapItem item3 = {11, 1};
+    heap_insert(&item3, H);
+    
+    HeapItem item4 = {24, 1};
+    heap_insert(&item4, H);
+    
+    HeapItem item5 = {7, 1};
+    heap_insert(&item5, H);
+    
+    HeapItem item6 = {111, 1};
+    heap_insert(&item6, H);
+    
+    HeapItem item7 = {4, 1};
+    heap_insert(&item7, H);
     
     
     heap_print(H);
     printf("min: %d\n", heap_deletemin(H));
     heap_print(H);
     printf("min: %d\n", heap_deletemin(H));
-    heap_print(H);*/
-    
-    
-    GetVertices();
-    GetEdges();
-    printf("%i\n", Vindex[15]);
-    printf("%i\n", Estart[1]);
-    printf("%i\n", Eend[1]);
-    
-    AList *alist = alist_init(nV);
-    for (int i=0; i<nE; i++) {
-        alist_add_edge(Estart[i], Eend[i], alist);
-    }
-    alist_print(alist);
+    heap_print(H);
     
     /*Dijkstra(0);*/
     
