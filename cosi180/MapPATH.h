@@ -4,4 +4,4 @@
 /*(e.g., your home directory). But this may have to be changed depending where on your */
 /*system your code is located.                                                         */
 /***************************************************************************************/
-char PATH[100] = "";
+char PATH[100] = "/Users/joshsilverman/Dropbox/Apps/cosi180/cosi180/cosi180/";

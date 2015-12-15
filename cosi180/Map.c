@@ -109,7 +109,8 @@ void edge_print(Edge *edge) {
 
 typedef struct {
     int d;                /*The value of the heap item to partially sort on*/
-    unsigned int v_index; /*A reference to the index of the vertex stored in heap item*/
+    int v_index; /*A reference to the index of the vertex stored in heap item*/
+    unsigned int marked;
 } HeapItem;
 
 typedef struct {
@@ -127,16 +128,23 @@ unsigned int heap_child(unsigned int i, Heap *H);
 void heap_swap(int i, int j, Heap *H);
 void heap_grow(Heap *H);
 void heap_print(Heap *H);
-unsigned int heap_deletemin(Heap *H);
+unsigned int heap_deletemin(Heap *H, HeapItem *min);
+void heap_item_copy(HeapItem *a, HeapItem *b);
 
 Heap* heap_init() {
     Heap *H = malloc(sizeof(Heap));
-    (*H).size = 2;
+    (*H).size = 0;
     (*H).A = (HeapItem *)malloc((*H).size * sizeof(HeapItem));
     (*H).count = 0;
     
     return H;
 };
+
+void heap_item_copy(HeapItem *a, HeapItem *b) {
+    a->d = b->d;
+    a->v_index = b->v_index;
+    a->marked = b->marked;
+}
 
 void heap_insert(HeapItem *item, Heap *H) {
     printf("\n\ninserting %d\n", item->d);
@@ -151,18 +159,26 @@ void heap_insert(HeapItem *item, Heap *H) {
     /*heap_print(H);*/
 };
 
-unsigned int heap_deletemin(Heap *H) {
+unsigned int heap_deletemin(Heap *H, HeapItem *min) {
     printf("\ndeletemin\n");
+    
     if ((*H).count > 0) {
         heap_swap(0, (*H).count-1, H);
         (*H).count = (*H).count-1;
-        unsigned int min = (*H).A[(*H).count].d;
-        (*H).A[(*H).count].d = 0;
+        
+        min->d = (*H).A[(*H).count].d;
+        min->v_index = (*H).A[(*H).count].v_index;
+        min->marked = (*H).A[(*H).count].marked;
+        
+        (*H).A[(*H).count].d = -1;
+        (*H).A[(*H).count].v_index = -1;
+        (*H).A[(*H).count].marked = 0;
+        
         heap_percdown(0, H);
         
-        return min;
+        return 1;
     } else {
-        return -1;
+        return 0;
     }
 };
 
@@ -214,19 +230,34 @@ unsigned int heap_child(unsigned int i, Heap *H) {
 
 void heap_swap(int i, int j, Heap *H) {
     printf("swap: %2d and %2d\n", (*H).A[i].d, (*H).A[j].d);
-    HeapItem tmp = (*H).A[i];
+    HeapItem *tmp = malloc(sizeof(HeapItem));
+    heap_item_copy(tmp, &(*H).A[i]);
     (*H).A[i] = (*H).A[j];
-    (*H).A[j] = tmp;
+    (*H).A[j] = *tmp;
 };
 
 void heap_grow(Heap *H) {
     printf("resize\n");
-    (*H).size = (*H).size * 2;
+    (*H).size = ((*H).size + 1) * 2;
     HeapItem *tmpArray;
     tmpArray = (HeapItem *)malloc((*H).size * sizeof(HeapItem));
     
-    for (int i=0; i<(*H).count; i++) {
+    int i;
+    for (i=0; i<(*H).count; i++) {
         tmpArray[i] = (*H).A[i];
+    };
+    
+    for (i=(*H).count; i<(*H).size; i++) {
+        HeapItem *item = malloc(sizeof(HeapItem));
+        item->d = -1;
+        item->v_index -1;
+        item->marked = 0;
+        
+        tmpArray[i] = *item;
+        
+        /*tmpArray[i].d = -1;
+        tmpArray[i].v_index = -1;
+        tmpArray[i].marked = 0;*/
     };
     
     free((*H).A);
@@ -259,11 +290,15 @@ void Dijkstra(int DijkstraFlag) {
     Heap *D = heap_init();
     for (int j=0; j<nV; j++) {
         int init_cost = (j == Begin) ? 0 : 1000000;
-        HeapItem item = {init_cost, j};
+        HeapItem item = {init_cost, j, 0};
         heap_insert(&item, D);
     }
     
     printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
+    HeapItem *min = malloc(sizeof(HeapItem));
+    while (heap_deletemin(D, min) > 0) {
+        printf("min: %d\n", min->d);
+    }
 }
 
 
