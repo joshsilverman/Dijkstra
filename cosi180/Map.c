@@ -289,42 +289,60 @@ void heap_print(Heap *H) {
 
 
 void Dijkstra(int DijkstraFlag) {
+    int i;
+    
     /*Load edges into adjacency list*/
     AList *alist = alist_init(nV);
-    for (int i=0; i<nE; i++) {
+    for (i=0; i<nE; i++) {
         alist_add_edge(Estart[i], Eend[i], i, alist);
     }
     alist_print(alist);
     
     /*Load dictionary of unmarked vertices*/
     Heap *D = heap_init();
-    for (int j=0; j<nV; j++) {
-        int init_cost = (j == Begin) ? 0 : 1000000;
-        HeapItem item = {init_cost, j, 0};
+    for (i=0; i<nV; i++) {
+        int init_cost = (i == Begin) ? 0 : 1000000;
+        HeapItem item = {init_cost, i, 0};
         heap_insert(&item, D);
     }
     
-    for (int k=0; k<nV; k++) {
+    /*for (int k=0; k<nV; k++) {
         printf("A: i of %i points to vertex %i\n", k, D->A[k].v_index);
         printf("D: i of %i points to vertex %i\n", k, D->D[k]);
-    }
+    }*/
     
-    /*printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
-    HeapItem *min = malloc(sizeof(HeapItem));
-    while (heap_deletemin(D, min) > 0) {
-        printf("min: %d\n", min->d);
-
-        Edge *edge = &alist->A[min->v_index];
+    printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
+    HeapItem *marked_vertices = malloc(nV * sizeof(HeapItem));
+    for (i=0; i<D->size; i++) {
+        HeapItem *item = malloc(sizeof(HeapItem));
+        item->d = -1;
+        item->v_index = -1;
+        item->marked = 0;
+        
+        marked_vertices[i] = *item;
+    };
+    
+    HeapItem *v = (HeapItem *)malloc(sizeof(HeapItem));
+    while (heap_deletemin(D, v) > 0) {
+        printf("min: %d\n", v->d);
+        v->marked = 1;
+        Edge *edge = &alist->A[v->v_index];
+        
         if (!edge || edge->vertex_i == -1) {
         } else {
             while (edge) {
                 printf(" -> %i", edge->vertex_i);
                 printf("(%i)", EdgeCost(edge->edge_i));
                 
-                edge->vertex_i;
-                if (min->d + EdgeCost(edge->edge_i) < ) {
-                    
+                int w_i = edge->vertex_i;
+                if (v->d + EdgeCost(edge->edge_i) < D->A[D->D[w_i]].d) {
+                    D->A[D->D[w_i]].d = v->d + EdgeCost(edge->edge_i);
+                    heap_percup(D->D[w_i], D);
                 }
+                
+                HeapItem *tmp = malloc(sizeof(HeapItem));
+                heap_item_copy(tmp, v);
+                marked_vertices[v->v_index] = *tmp;
                 
                 if (edge->edge) {
                     edge = edge->edge;
@@ -333,7 +351,11 @@ void Dijkstra(int DijkstraFlag) {
                 }
             }
         }
-    }*/
+    }
+    
+    for (int m=0; m<nV; m++) {
+        printf("\ncost to get to %s (%i) is %i", Vname[m], m, marked_vertices[m].d);
+    }
 }
 
 
