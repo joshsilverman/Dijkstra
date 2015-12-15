@@ -31,7 +31,8 @@ void PrintLeg(int edge);
 /***************************************************************************************/
 
 typedef struct Edge {
-    int vertex_i;
+    int vertex_i;           /*destination vertex*/
+    int edge_i;             /*edge index*/
     struct Edge *edge;
 } Edge;
 
@@ -41,7 +42,7 @@ typedef struct {
 } AList;
 
 AList* alist_init(int vertex_count);
-void alist_add_edge(int i, int j, AList *alist);
+void alist_add_edge(int i, int j, int edge_i, AList *alist);
 void alist_print(AList *alist);
 void edge_print(Edge *edge);
 
@@ -61,21 +62,22 @@ AList* alist_init(int vertex_count) {
     return alist;
 };
 
-void alist_add_edge(int i, int j, AList *alist) {
+void alist_add_edge(int i, int j, int edge_i, AList *alist) {
     printf("Adding edge %i -> %i\n", i, j);
     
     Edge *outgoing_edge = &(*alist).A[i];
     while ((*outgoing_edge).edge) {
-        outgoing_edge = (*outgoing_edge).edge;
+        outgoing_edge = outgoing_edge->edge;
     }
     
-    if ((*outgoing_edge).vertex_i == -1) {
-        (*outgoing_edge).vertex_i = j;
+    if (outgoing_edge->vertex_i == -1) {
+        outgoing_edge->vertex_i = j;
     } else {
         Edge *edge = malloc(sizeof(Edge));
-        (*edge).vertex_i = j;
-        (*edge).edge = NULL;
-        (*outgoing_edge).edge = edge;
+        edge->vertex_i = j;
+        edge->edge_i = edge_i;
+        edge->edge = NULL;
+        outgoing_edge->edge = edge;
     }
 };
 
@@ -250,7 +252,7 @@ void heap_grow(Heap *H) {
     for (i=(*H).count; i<(*H).size; i++) {
         HeapItem *item = malloc(sizeof(HeapItem));
         item->d = -1;
-        item->v_index -1;
+        item->v_index = -1;
         item->marked = 0;
         
         tmpArray[i] = *item;
@@ -282,7 +284,7 @@ void Dijkstra(int DijkstraFlag) {
     /*Load edges into adjacency list*/
     AList *alist = alist_init(nV);
     for (int i=0; i<nE; i++) {
-        alist_add_edge(Estart[i], Eend[i], alist);
+        alist_add_edge(Estart[i], Eend[i], i, alist);
     }
     alist_print(alist);
     
@@ -298,6 +300,28 @@ void Dijkstra(int DijkstraFlag) {
     HeapItem *min = malloc(sizeof(HeapItem));
     while (heap_deletemin(D, min) > 0) {
         printf("min: %d\n", min->d);
+
+        Edge *edge = &(*alist).A[min->v_index];
+        if (!edge || (*edge).vertex_i == -1) {
+//            return;
+        } else {
+            while (edge) {
+                printf(" -> %i", (*edge).vertex_i);
+                printf("(%i)", EdgeCost(edge->edge_i));
+                
+                /*edge->vertex_i;
+                if (min->d + EdgeCost(edge->edge_i) < ) {
+                    
+                }*/
+                
+                if ((*edge).edge) {
+                    edge = (*edge).edge;
+                } else {
+                    edge = NULL;
+                }
+            }
+        }
+        
     }
 }
 
