@@ -110,8 +110,10 @@ void edge_print(Edge *edge) {
 /***************************************************************************************/
 
 typedef struct {
-    int d;                  /*The value of the heap item to partially sort on*/
-    int v_index;            /*A reference to the index of the vertex stored in heap item*/
+    int d;                          /*The value of the heap item to partially sort on*/
+    int v_index;                    /*A reference to the index of the vertex stored in heap item*/
+    int incoming_edge_i;
+    int previous_vertex_i;
     unsigned int marked;
 } HeapItem;
 
@@ -148,6 +150,8 @@ void heap_item_copy(HeapItem *a, HeapItem *b) {
     a->d = b->d;
     a->v_index = b->v_index;
     a->marked = b->marked;
+    a->incoming_edge_i = b->incoming_edge_i;
+    a->previous_vertex_i = b->previous_vertex_i;
 }
 
 void heap_insert(HeapItem *item, Heap *H) {
@@ -174,6 +178,8 @@ unsigned int heap_deletemin(Heap *H, HeapItem *min) {
         min->d = H->A[H->count].d;
         min->v_index = H->A[H->count].v_index;
         min->marked = H->A[H->count].marked;
+        min->incoming_edge_i = H->A[H->count].incoming_edge_i;
+        min->previous_vertex_i = H->A[H->count].previous_vertex_i;
         
         H->A[H->count].d = -1;
         H->A[H->count].v_index = -1;
@@ -226,7 +232,7 @@ unsigned int heap_child(unsigned int i, Heap *H) {
     }
     
     printf("\nchild of %d is %d\n", i, child_index);
-    if (child_index >= (*H).count) {
+    if (child_index >= H->count) {
         return i;
     } else {
         return child_index;
@@ -264,6 +270,7 @@ void heap_grow(Heap *H) {
         item->d = -1;
         item->v_index = -1;
         item->marked = 0;
+        item->previous_vertex_i = -1;
         
         newA[i] = *item;
     };
@@ -302,14 +309,9 @@ void Dijkstra(int DijkstraFlag) {
     Heap *D = heap_init();
     for (i=0; i<nV; i++) {
         int init_cost = (i == Begin) ? 0 : 1000000;
-        HeapItem item = {init_cost, i, 0};
+        HeapItem item = {init_cost, i, -1, -1, 0};
         heap_insert(&item, D);
     }
-    
-    /*for (int k=0; k<nV; k++) {
-        printf("A: i of %i points to vertex %i\n", k, D->A[k].v_index);
-        printf("D: i of %i points to vertex %i\n", k, D->D[k]);
-    }*/
     
     printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
     HeapItem *marked_vertices = malloc(nV * sizeof(HeapItem));
@@ -323,6 +325,7 @@ void Dijkstra(int DijkstraFlag) {
     };
     
     HeapItem *v = (HeapItem *)malloc(sizeof(HeapItem));
+    HeapItem *w;
     while (heap_deletemin(D, v) > 0) {
         printf("min: %d\n", v->d);
         v->marked = 1;
@@ -335,8 +338,11 @@ void Dijkstra(int DijkstraFlag) {
                 printf("(%i)", EdgeCost(edge->edge_i));
                 
                 int w_i = edge->vertex_i;
-                if (v->d + EdgeCost(edge->edge_i) < D->A[D->D[w_i]].d) {
-                    D->A[D->D[w_i]].d = v->d + EdgeCost(edge->edge_i);
+                w = &D->A[D->D[w_i]];
+                if (v->d + EdgeCost(edge->edge_i) < w->d) {
+                    w->d = v->d + EdgeCost(edge->edge_i);
+                    w->incoming_edge_i = edge->edge_i;
+                    w->previous_vertex_i = v->v_index;
                     heap_percup(D->D[w_i], D);
                 }
                 
@@ -353,8 +359,29 @@ void Dijkstra(int DijkstraFlag) {
         }
     }
     
-    for (int m=0; m<nV; m++) {
+    /*for (int m=0; m<nV; m++) {
         printf("\ncost to get to %s (%i) is %i", Vname[m], m, marked_vertices[m].d);
+        printf("\n  best arrived at by: %i", marked_vertices[m].back_vertex_i);
+    }*/
+    
+    int edges_indices[151];
+    int count = 0;
+    v = &marked_vertices[Finish];
+    w = &marked_vertices[v->previous_vertex_i];
+    while (w) {
+        edges_indices[count] = v->incoming_edge_i;
+        v = w;
+        if (w->previous_vertex_i == -1) {
+            w = NULL;
+        } else {
+            w = &marked_vertices[w->previous_vertex_i];
+        }
+        count++;
+    }
+    
+    for (i=count-1; i>=0; i--) {
+        printf("\nfollow edge %i\n", edges_indices[i]);
+        PrintLeg(Eindex[edges_indices[i]]);
     }
 }
 
@@ -402,14 +429,14 @@ int main() {
     printf("min: %d\n", heap_deletemin(H));
     heap_print(H);*/
     
-    GetVertices();
-    GetEdges();
-    Begin = 66;
-    Finish = 62;
-    Dijkstra(0);
-    
     /*GetVertices();
     GetEdges();
+    Begin = 99;
+    Finish = 62;
+    Dijkstra(0);*/
+    
+    GetVertices();
+    GetEdges();
     while (GetRequest()) {RouteOpen(); TourFlag ? Tour() : Dijkstra(0); RouteClose();}
-    return(0);*/
+    return(0);
 }
