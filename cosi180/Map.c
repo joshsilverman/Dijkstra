@@ -348,13 +348,6 @@ void Dijkstra(int DijkstraFlag) {
                 if (marked_vertices[w_i].marked != 1) {
                     w = &D->A[D->D[w_i]];
                     
-                    if (w->v_index == 17) {
-                        1 + 1;
-                        /*if (<#condition#>) {
-                            <#statements#>
-                        }*/
-                    }
-                    
                     int cost = EdgeCost(edge->edge_i);
                     if (v->d + cost < w->d) {
                         w->d = v->d + EdgeCost(edge->edge_i);
