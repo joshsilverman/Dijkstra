@@ -1,9 +1,17 @@
 Cosi 180 Final Project - Submission
 by Josh Silverman
 
-NOTE: I have not special notes on how to run the Map.c beyond the information provide with the assignment. My Output.txt matches the provided Solutions.txt.
+Part 1
+
+I have no special notes on how to run the Map.c beyond the information provided with the assignment. 
+
+Output.txt matches the provided Solutions.txt.
 
 How it works: The program follows the assignment closely, making use of a graph adjacency list data structure, heap data structure (which useds percup for the DECREASE method), and Dijkstra's single source shortest path algorithm.
+
+Part 2A
+
+I implemented Prim using the adjaceny list for the graph. I made the heap/dictionary structure more general so it can now be used to do operations on both vertices (time/distance from origin to vertex) and edges (edge weight).
 
 http://www.cs.brandeis.edu/~storer/cs180/Assignments/BrandeisMap/Project.html
 
