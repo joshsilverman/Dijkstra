@@ -63,8 +63,6 @@ AList* alist_init(int vertex_count) {
 };
 
 void alist_add_edge(int i, int j, int edge_i, AList *alist) {
-    printf("Adding edge %i -> %i\n", i, j);
-    
     Edge *outgoing_edge = malloc(sizeof(Edge));
     outgoing_edge = &alist->A[i];
     while (outgoing_edge->edge) {
@@ -157,7 +155,6 @@ void heap_item_copy(HeapItem *a, HeapItem *b) {
 }
 
 void heap_insert(HeapItem *item, Heap *H) {
-    /*printf("\n\ninserting %d\n", item->d);*/
     if (H->count >= H->size) {
         heap_grow(H);
     }
@@ -166,13 +163,9 @@ void heap_insert(HeapItem *item, Heap *H) {
     H->D[item->v_index] = H->count;
     heap_percup(H->count, H);
     H->count = H->count + 1;
-    
-    /*heap_print(H);*/
 };
 
 unsigned int heap_deletemin(Heap *H, HeapItem *min) {
-    /*printf("\ndeletemin\n");*/
-    
     if (H->count > 0) {
         heap_swap(0, H->count-1, H);
         H->count = H->count-1;
@@ -205,7 +198,6 @@ void heap_percup(unsigned int i, Heap *H) {
 }
 
 void heap_percdown(unsigned int i, Heap *H) {
-    /*printf("\nheap_percdown\n");*/
     unsigned int child_i = heap_child(i, H);
     while (H->A[child_i].d < H->A[i].d) {
         heap_swap(i, child_i, H);
@@ -233,7 +225,6 @@ unsigned int heap_child(unsigned int i, Heap *H) {
         child_index = rchild_index;
     }
     
-    /*printf("\nchild of %d is %d\n", i, child_index);*/
     if (child_index >= H->count) {
         return i;
     } else {
@@ -242,8 +233,6 @@ unsigned int heap_child(unsigned int i, Heap *H) {
 };
 
 void heap_swap(int i, int j, Heap *H) {
-    /*printf("swap: %2d and %2d\n", H->A[i].d, H->A[j].d);*/
-    
     HeapItem *tmp = malloc(sizeof(HeapItem));
     heap_item_copy(tmp, &H->A[i]);
     H->A[i] = H->A[j];
@@ -254,7 +243,6 @@ void heap_swap(int i, int j, Heap *H) {
 };
 
 void heap_grow(Heap *H) {
-    /*printf("resize\n");*/
     H->size = (H->size + 1) * 2;
     HeapItem *newA;
     int *newD;
@@ -304,7 +292,6 @@ void Dijkstra(int DijkstraFlag) {
     for (i=0; i<nE; i++) {
         alist_add_edge(Estart[i], Eend[i], i, alist);
     }
-    alist_print(alist);
     
     /*Load dictionary of unmarked vertices*/
     Heap *D = heap_init();
@@ -319,7 +306,6 @@ void Dijkstra(int DijkstraFlag) {
         heap_insert(item, D);
     }
     
-    printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
     HeapItem *marked_vertices = malloc(D->size * sizeof(HeapItem));
     for (i=0; i<D->size; i++) {
         HeapItem *item = malloc(sizeof(HeapItem));
@@ -333,7 +319,6 @@ void Dijkstra(int DijkstraFlag) {
     HeapItem *v = (HeapItem *)malloc(sizeof(HeapItem));
     HeapItem *w = (HeapItem *)malloc(sizeof(HeapItem));
     while (heap_deletemin(D, v) > 0) {
-        printf("min: %d\n", v->d);
         v->marked = 1;
         Edge *edge = malloc(sizeof(Edge));
         edge = &alist->A[v->v_index];
@@ -341,9 +326,6 @@ void Dijkstra(int DijkstraFlag) {
         if (!edge || edge->vertex_i == -1) {
         } else {
             while (edge) {
-                printf(" -> %i", edge->vertex_i);
-                printf("(%i)", EdgeCost(edge->edge_i));
-                
                 int w_i = edge->vertex_i;
                 if (marked_vertices[w_i].marked != 1) {
                     w = &D->A[D->D[w_i]];
@@ -369,11 +351,6 @@ void Dijkstra(int DijkstraFlag) {
         heap_item_copy(tmp, v);
         marked_vertices[v->v_index] = *tmp;
     }
-    
-    /*for (int m=0; m<nV; m++) {
-        printf("\ncost to get to %s (%i) is %i", Vname[m], m, marked_vertices[m].d);
-        printf("\n  best arrived at by: %i", marked_vertices[m].back_vertex_i);
-    }*/
     
     int edges_indices[151];
     int count = 0;
@@ -409,43 +386,6 @@ void Dijkstra(int DijkstraFlag) {
 /*MAIN PROGRAM (don't modify)                                                          */
 /***************************************************************************************/
 int main() {
-    
-    /*Heap *H = heap_init();
-    
-    HeapItem item1 = {10, 0};
-    heap_insert(&item1, H);
-    
-    HeapItem item2 = {8, 1};
-    heap_insert(&item2, H);
-    
-    HeapItem item3 = {11, 1};
-    heap_insert(&item3, H);
-    
-    HeapItem item4 = {24, 1};
-    heap_insert(&item4, H);
-    
-    HeapItem item5 = {7, 1};
-    heap_insert(&item5, H);
-    
-    HeapItem item6 = {111, 1};
-    heap_insert(&item6, H);
-    
-    HeapItem item7 = {4, 1};
-    heap_insert(&item7, H);
-    
-    
-    heap_print(H);
-    printf("min: %d\n", heap_deletemin(H));
-    heap_print(H);
-    printf("min: %d\n", heap_deletemin(H));
-    heap_print(H);*/
-    
-    /*GetVertices();
-    GetEdges();
-    Begin = 99;
-    Finish = 62;
-    Dijkstra(0);*/
-    
     GetVertices();
     GetEdges();
     while (GetRequest()) {RouteOpen(); TourFlag ? Tour() : Dijkstra(0); RouteClose();}
