@@ -116,7 +116,7 @@ typedef struct {
     int v_index;                    /*A reference to the index of the vertex stored in heap item*/
     int incoming_edge_i;
     int previous_vertex_i;
-    unsigned int marked;
+    int marked;
 } HeapItem;
 
 typedef struct {
@@ -257,8 +257,9 @@ void heap_grow(Heap *H) {
     /*printf("resize\n");*/
     H->size = (H->size + 1) * 2;
     HeapItem *newA;
+    int *newD;
     newA = (HeapItem *)malloc(H->size * sizeof(HeapItem));
-    int newD[H->size];
+    newD = (int *)malloc(H->size * sizeof(int));
     
     int i;
     for (i=0; i<H->count; i++) {
@@ -309,12 +310,17 @@ void Dijkstra(int DijkstraFlag) {
     Heap *D = heap_init();
     for (i=0; i<nV; i++) {
         int init_cost = (i == Begin) ? 0 : 10000000;
-        HeapItem item = {init_cost, i, -1, -1, 0};
-        heap_insert(&item, D);
+        HeapItem *item = malloc(sizeof(HeapItem));
+        item->d = init_cost;
+        item->marked = 0;
+        item->v_index = i;
+        item->incoming_edge_i = -1;
+        item->previous_vertex_i = -1;
+        heap_insert(item, D);
     }
     
     printf("\nBegin: %i\nFinish: %i\n", Begin, Finish);
-    HeapItem *marked_vertices = malloc(nV * sizeof(HeapItem));
+    HeapItem *marked_vertices = malloc(D->size * sizeof(HeapItem));
     for (i=0; i<D->size; i++) {
         HeapItem *item = malloc(sizeof(HeapItem));
         item->d = -1;
@@ -329,7 +335,8 @@ void Dijkstra(int DijkstraFlag) {
     while (heap_deletemin(D, v) > 0) {
         printf("min: %d\n", v->d);
         v->marked = 1;
-        Edge *edge = &alist->A[v->v_index];
+        Edge *edge = malloc(sizeof(Edge));
+        edge = &alist->A[v->v_index];
         
         if (!edge || edge->vertex_i == -1) {
         } else {
