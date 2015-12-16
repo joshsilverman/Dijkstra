@@ -53,10 +53,10 @@ AList* alist_init(int vertex_count) {
     
     
     for (int i=0; i < (*alist).size; i++) {
-        Edge edge;
-        edge.vertex_i = -1;
-        edge.edge = NULL;
-        (*alist).A[i] = edge;
+        Edge *edge = malloc(sizeof(Edge));
+        edge->vertex_i = -1;
+        edge->edge = NULL;
+        (*alist).A[i] = *edge;
     }
     
     return alist;
@@ -65,13 +65,14 @@ AList* alist_init(int vertex_count) {
 void alist_add_edge(int i, int j, int edge_i, AList *alist) {
     printf("Adding edge %i -> %i\n", i, j);
     
-    Edge *outgoing_edge = &(*alist).A[i];
-    while ((*outgoing_edge).edge) {
+    Edge *outgoing_edge = &alist->A[i];
+    while (outgoing_edge->edge) {
         outgoing_edge = outgoing_edge->edge;
     }
     
     if (outgoing_edge->vertex_i == -1) {
         outgoing_edge->vertex_i = j;
+        outgoing_edge->edge_i = edge_i;
     } else {
         Edge *edge = malloc(sizeof(Edge));
         edge->vertex_i = j;
@@ -83,7 +84,7 @@ void alist_add_edge(int i, int j, int edge_i, AList *alist) {
 
 void alist_print(AList *alist) {
     for (int i = 0; i < (*alist).size; i++) {
-        printf("index: %i", i);
+        printf("%s: %i", Vlabel[i], i);
         edge_print(&(*alist).A[i]);
         printf("\n");
     }
@@ -94,7 +95,7 @@ void edge_print(Edge *edge) {
         return;
     } else {
         while (edge) {
-            printf("->%i", (*edge).vertex_i);
+            printf("->%s", Vlabel[(*edge).vertex_i]);
             
             if ((*edge).edge) {
                 edge = (*edge).edge;
@@ -155,7 +156,7 @@ void heap_item_copy(HeapItem *a, HeapItem *b) {
 }
 
 void heap_insert(HeapItem *item, Heap *H) {
-    printf("\n\ninserting %d\n", item->d);
+    /*printf("\n\ninserting %d\n", item->d);*/
     if (H->count >= H->size) {
         heap_grow(H);
     }
@@ -169,7 +170,7 @@ void heap_insert(HeapItem *item, Heap *H) {
 };
 
 unsigned int heap_deletemin(Heap *H, HeapItem *min) {
-    printf("\ndeletemin\n");
+    /*printf("\ndeletemin\n");*/
     
     if (H->count > 0) {
         heap_swap(0, H->count-1, H);
@@ -203,7 +204,7 @@ void heap_percup(unsigned int i, Heap *H) {
 }
 
 void heap_percdown(unsigned int i, Heap *H) {
-    printf("\nheap_percdown\n");
+    /*printf("\nheap_percdown\n");*/
     unsigned int child_i = heap_child(i, H);
     while (H->A[child_i].d < H->A[i].d) {
         heap_swap(i, child_i, H);
@@ -231,7 +232,7 @@ unsigned int heap_child(unsigned int i, Heap *H) {
         child_index = rchild_index;
     }
     
-    printf("\nchild of %d is %d\n", i, child_index);
+    /*printf("\nchild of %d is %d\n", i, child_index);*/
     if (child_index >= H->count) {
         return i;
     } else {
@@ -240,7 +241,7 @@ unsigned int heap_child(unsigned int i, Heap *H) {
 };
 
 void heap_swap(int i, int j, Heap *H) {
-    printf("swap: %2d and %2d\n", H->A[i].d, H->A[j].d);
+    /*printf("swap: %2d and %2d\n", H->A[i].d, H->A[j].d);*/
     
     HeapItem *tmp = malloc(sizeof(HeapItem));
     heap_item_copy(tmp, &H->A[i]);
@@ -252,7 +253,7 @@ void heap_swap(int i, int j, Heap *H) {
 };
 
 void heap_grow(Heap *H) {
-    printf("resize\n");
+    /*printf("resize\n");*/
     H->size = (H->size + 1) * 2;
     HeapItem *newA;
     int *newD;
@@ -308,7 +309,7 @@ void Dijkstra(int DijkstraFlag) {
     /*Load dictionary of unmarked vertices*/
     Heap *D = heap_init();
     for (i=0; i<nV; i++) {
-        int init_cost = (i == Begin) ? 0 : 1000000;
+        int init_cost = (i == Begin) ? 0 : 10000000;
         HeapItem item = {init_cost, i, -1, -1, 0};
         heap_insert(&item, D);
     }
@@ -325,7 +326,7 @@ void Dijkstra(int DijkstraFlag) {
     };
     
     HeapItem *v = (HeapItem *)malloc(sizeof(HeapItem));
-    HeapItem *w;
+    HeapItem *w = (HeapItem *)malloc(sizeof(HeapItem));
     while (heap_deletemin(D, v) > 0) {
         printf("min: %d\n", v->d);
         v->marked = 1;
@@ -338,17 +339,24 @@ void Dijkstra(int DijkstraFlag) {
                 printf("(%i)", EdgeCost(edge->edge_i));
                 
                 int w_i = edge->vertex_i;
-                w = &D->A[D->D[w_i]];
-                if (v->d + EdgeCost(edge->edge_i) < w->d) {
-                    w->d = v->d + EdgeCost(edge->edge_i);
-                    w->incoming_edge_i = edge->edge_i;
-                    w->previous_vertex_i = v->v_index;
-                    heap_percup(D->D[w_i], D);
+                if (marked_vertices[w_i].marked != 1) {
+                    w = &D->A[D->D[w_i]];
+                    
+                    if (w->v_index == 17) {
+                        1 + 1;
+                        /*if (<#condition#>) {
+                            <#statements#>
+                        }*/
+                    }
+                    
+                    int cost = EdgeCost(edge->edge_i);
+                    if (v->d + cost < w->d) {
+                        w->d = v->d + EdgeCost(edge->edge_i);
+                        w->incoming_edge_i = edge->edge_i;
+                        w->previous_vertex_i = v->v_index;
+                        heap_percup(D->D[w_i], D);
+                    }
                 }
-                
-                HeapItem *tmp = malloc(sizeof(HeapItem));
-                heap_item_copy(tmp, v);
-                marked_vertices[v->v_index] = *tmp;
                 
                 if (edge->edge) {
                     edge = edge->edge;
@@ -357,6 +365,10 @@ void Dijkstra(int DijkstraFlag) {
                 }
             }
         }
+        
+        HeapItem *tmp = malloc(sizeof(HeapItem));
+        heap_item_copy(tmp, v);
+        marked_vertices[v->v_index] = *tmp;
     }
     
     /*for (int m=0; m<nV; m++) {

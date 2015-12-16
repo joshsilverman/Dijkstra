@@ -1,15 +1,7 @@
-507 - (66,65) [U25 -> U24] 
-508 - (65,69) [U24 -> U28] 
-528 - (69,143) [U28 -> *] 
-543 - (143,74) [* -> U35] 
-544 - (74,75) [U35 -> U36] 
-548 - (75,121) [U36 -> V] 
-227 - (121,86) [V -> U47] 
-228 - (86,122) [U47 -> W] 
-234 - (122,123) [W -> X] Health Center Steps
-214 - (123,146) [X -> ?] 
-221 - (146,144) [? -> +] Athletics Driveway
-213 - (144,125) [+ -> Z] Athletics Driveway
-199 - (125,98) [Z -> A7] Marcus Field
-200 - (98,147) [A7 -> ^] Marcus Field
-207 - (147,99) [^ -> A8] Gordon Field
+122 - (30,106) [L26 -> G] 
+96 - (106,110) [G -> K] 
+358 - (110,113) [K -> N] Central Campus Walkway
+362 - (113,116) [N -> Q] Central Campus Walkway Through Fellows Garden
+375 - (116,119) [Q -> T] Central Campus Walkway
+372 - (119,120) [T -> U] Central Campus Walkway
+563 - (120,76) [U -> U37] 
