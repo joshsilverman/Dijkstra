@@ -87,7 +87,6 @@ void Tour () {
     
     HeapItem *item = (HeapItem *)malloc(sizeof(HeapItem));
     while (spanning_tree_edge_count < nV - 1 && heap_deletemin(E, item) == 1) {
-        printf("delete");
         v = Estart[item->index];
         w = Eend[item->index];
         
