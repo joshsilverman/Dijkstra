@@ -17,6 +17,7 @@ OutputPrim.txt is a tour using Prim's algorithm. The tour begining at T takes 29
 
 2B
 
+I was debugging the triangle methods in Tour.h but was unable to get them working. I have left my code which looks for 3 sided polygons with one incoming adjacency and seeks to creat a cycle.
 
 
 http://www.cs.brandeis.edu/~storer/cs180/Assignments/BrandeisMap/Project.html
