@@ -77,31 +77,28 @@ void triangle_tree_tour(AList *spanning_tree, int i) {
 int make_triangle(AList *spanning_tree, int i) {
     Edge *a = malloc(sizeof(Edge));
     Edge *b = malloc(sizeof(Edge));
-    Edge *c = malloc(sizeof(Edge));
-    Edge *bc = malloc(sizeof(Edge));
+    Edge *ab = malloc(sizeof(Edge));
     a = &spanning_tree->A[i];
     
     /*Look for 3 edge polygon with one incoming edge*/
-    if (   a && a->vertex_i != -1
+    if (   a->vertex_i != -1
+        && spanning_tree->A[a->vertex_i].vertex_i == -1
         && a->edge && a->edge->vertex_i != -1
         && spanning_tree->A[a->edge->vertex_i].vertex_i == -1
-        && a->edge->edge && a->edge->edge->vertex_i != -1
-        && spanning_tree->A[a->edge->edge->vertex_i].vertex_i == -1
-        && a->edge->edge->edge == NULL) {
+        && a->edge->edge == NULL) {
         
         b = a->edge;
-        c = b->edge;
-        bc = &alist->A[b->vertex_i];
-        while (bc) {
-            if (bc->vertex_i == c->vertex_i) {
-                PrintLeg(Eindex[b->edge_i]);
-                PrintLeg(Eindex[bc->edge_i]);
-                PrintLeg(Eindex[get_inverse_edge(alist, c->edge_i)]);
+        ab = &alist->A[a->vertex_i];
+        while (ab) {
+            if (ab->vertex_i == b->vertex_i) {
+                PrintLeg(Eindex[a->edge_i]);
+                PrintLeg(Eindex[ab->edge_i]);
+                PrintLeg(Eindex[get_inverse_edge(alist, b->edge_i)]);
                 return 1;
             }
 
-            if (bc->vertex_i != -1) {
-                bc = bc->edge;
+            if (ab->vertex_i != -1) {
+                ab = ab->edge;
             }
         }
     }
@@ -164,6 +161,7 @@ void Prim (int triangle_optimization) {
     }
 
     /*Traverse spanning tree*/
+    /*alist_print(spanning_tree);*/
     if (triangle_optimization == 0) {
         spanning_tree_tour(spanning_tree, Begin);
     } else if (triangle_optimization == 1) {

@@ -8,6 +8,4 @@ I'm not aware of any bugs in the Prim methods
 
 2B
 
-I was debugging the triangle methods in Tour.h but was unable to get them working. I have left my code which looks for 3 sided polygons with one incoming adjacency and seeks to create a cycle.
-
-My bug is almost certainly in the conditional for testing if a triangle can exist at the bottom of a MST.
+I implemented a simple triangle algorithm which reduced distance slightly to 289 legs in 15.7 miles.
