@@ -9,16 +9,6 @@ Output.txt matches the provided Solutions.txt.
 
 How it works: The program follows the assignment closely, making use of a graph adjacency list data structure, heap data structure (which useds percup for the DECREASE method), and Dijkstra's single source shortest path algorithm.
 
-Part 2A
-
-I implemented Prim using the adjaceny list for the graph. I made the heap/dictionary structure more general so it can now be used to do operations on both vertices (time/distance from origin to vertex) and edges (edge weight).
-
-OutputPrim.txt is a tour using Prim's algorithm. The tour begining at T takes 292 legs and 15.9 miles.
-
-2B
-
-I was debugging the triangle methods in Tour.h but was unable to get them working. I have left my code which looks for 3 sided polygons with one incoming adjacency and seeks to creat a cycle.
-
 
 http://www.cs.brandeis.edu/~storer/cs180/Assignments/BrandeisMap/Project.html
 
