@@ -2,9 +2,13 @@
 /*Brandeis Map - Tour .h file*/
 
 void add_edges_to_heap(AList *alist, Heap *E, int i);
-void spanning_tree_tour(AList *spanning_tree, int start);
+void spanning_tree_tour(AList *spanning_tree, int i);
+
+void triangle_tree_tour(AList *spanning_tree, int i);
+int make_triangle(AList *spanning_tree, int i);
+
 int get_inverse_edge(AList * alist, int i);
-void Prim();
+void Prim(int triangle_optimization);
 void Triangle();
 
 AList *alist;       /*Make adjacency graph available to helper methods*/
@@ -48,6 +52,63 @@ void spanning_tree_tour(AList *spanning_tree, int i) {
     }
 }
 
+void triangle_tree_tour(AList *spanning_tree, int i) {
+    Edge *edge = malloc(sizeof(Edge));
+    edge = &spanning_tree->A[i];
+    if (!edge || edge->vertex_i == -1) {
+    } else {
+        while (edge) {
+            PrintLeg(Eindex[edge->edge_i]);
+            int inverse_i = get_inverse_edge(alist, edge->edge_i);
+            
+            if (edge->vertex_i != -1) {
+                if (make_triangle(spanning_tree, edge->vertex_i) == 1) {
+                    /*Successfully made a triangle!*/
+                } else {
+                    triangle_tree_tour(spanning_tree, edge->vertex_i);
+                }
+            }
+            edge = edge->edge;
+            PrintLeg(Eindex[inverse_i]);
+        }
+    }
+}
+
+int make_triangle(AList *spanning_tree, int i) {
+    Edge *a = malloc(sizeof(Edge));
+    Edge *b = malloc(sizeof(Edge));
+    Edge *c = malloc(sizeof(Edge));
+    Edge *bc = malloc(sizeof(Edge));
+    a = &spanning_tree->A[i];
+    
+    /*Look for 3 edge polygon with one incoming edge*/
+    if (   a && a->vertex_i != -1
+        && a->edge && a->edge->vertex_i != -1
+        && spanning_tree->A[a->edge->vertex_i].vertex_i == -1
+        && a->edge->edge && a->edge->edge->vertex_i != -1
+        && spanning_tree->A[a->edge->edge->vertex_i].vertex_i == -1
+        && a->edge->edge->edge == NULL) {
+        
+        b = a->edge;
+        c = b->edge;
+        bc = &alist->A[b->vertex_i];
+        while (bc) {
+            if (bc->vertex_i == c->vertex_i) {
+                PrintLeg(Eindex[b->edge_i]);
+                PrintLeg(Eindex[bc->edge_i]);
+                PrintLeg(Eindex[get_inverse_edge(alist, c->edge_i)]);
+                return 1;
+            }
+
+            if (bc->vertex_i != -1) {
+                bc = bc->edge;
+            }
+        }
+    }
+    
+    return 0;
+}
+
 int get_inverse_edge(AList *alist, int i) {
     Edge *e = &alist->A[Eend[i]];
     while (e != NULL && e->vertex_i != -1) {
@@ -60,7 +121,7 @@ int get_inverse_edge(AList *alist, int i) {
     return -1;
 }
 
-void Prim () {
+void Prim (int triangle_optimization) {
     int i, v, w;
     
     /*Load edges into adjacency list*/
@@ -101,13 +162,14 @@ void Prim () {
             vertices_in_tree[w] = 1;
         }
     }
-    
-    /*Traverse spanning tree*/
-    spanning_tree_tour(spanning_tree, Begin);
-}
 
-void Triangle() {
-    
+    /*Traverse spanning tree*/
+    if (triangle_optimization == 0) {
+        spanning_tree_tour(spanning_tree, Begin);
+    } else if (triangle_optimization == 1) {
+        triangle_tree_tour(spanning_tree, Begin);
+    }
+
 }
 
 void Tour () {
@@ -118,8 +180,8 @@ void Tour () {
     printf("Selection: ");
     fflush(stdout); fgets(s,MaxString,stdin);
     if (s[0] == '1') {
-        Prim();
+        Prim(0);
     } else if (s[0] == '2') {
-        Triangle();
+        Prim(1);
     }
 }
