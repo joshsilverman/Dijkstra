@@ -3,6 +3,7 @@ by Josh Silverman
 
 NOTE: I have not special notes on how to run the Map.c beyond the information provide with the assignment. My Output.txt matches the provided Solutions.txt.
 
+How it works: The program follows the assignment closely, making use of a graph adjacency list data structure, heap data structure (which useds percup for the DECREASE method), and Dijkstra's single source shortest path algorithm.
 
 http://www.cs.brandeis.edu/~storer/cs180/Assignments/BrandeisMap/Project.html
 
