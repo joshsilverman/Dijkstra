@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9E5FEB8B1C04C01900470D03 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 9E5FEB8A1C04C01900470D03 /* main.c */; };
 		9E5FEB921C04C05900470D03 /* Map.c in Sources */ = {isa = PBXBuildFile; fileRef = 9E5FEB911C04C05900470D03 /* Map.c */; };
-		9E7F94B91C0A4D7800C88D1E /* Test.c in Sources */ = {isa = PBXBuildFile; fileRef = 9E7F94B81C0A4D7800C88D1E /* Test.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +24,6 @@
 
 /* Begin PBXFileReference section */
 		9E5FEB871C04C01900470D03 /* cosi180 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cosi180; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E5FEB8A1C04C01900470D03 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		9E5FEB911C04C05900470D03 /* Map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Map.c; sourceTree = "<group>"; };
 		9E5FEB931C04C0B100470D03 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map.h; sourceTree = "<group>"; };
 		9E5FEB941C04C0B100470D03 /* MapPATH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPATH.h; sourceTree = "<group>"; };
@@ -35,7 +32,8 @@
 		9E5FEB971C04C12800470D03 /* MapData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapData.h; sourceTree = "<group>"; };
 		9E5FEB981C04C16A00470D03 /* MapInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapInput.h; sourceTree = "<group>"; };
 		9E5FEB991C04C16A00470D03 /* MapOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapOutput.h; sourceTree = "<group>"; };
-		9E7F94B81C0A4D7800C88D1E /* Test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Test.c; sourceTree = "<group>"; };
+		9EA981DB1C0D61B3007B77FA /* MapDataEdges.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MapDataEdges.txt; sourceTree = "<group>"; };
+		9EA981DC1C0D61B3007B77FA /* MapDataVertices.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MapDataVertices.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,15 +66,15 @@
 		9E5FEB891C04C01900470D03 /* cosi180 */ = {
 			isa = PBXGroup;
 			children = (
-				9E5FEB8A1C04C01900470D03 /* main.c */,
 				9E5FEB911C04C05900470D03 /* Map.c */,
-				9E7F94B81C0A4D7800C88D1E /* Test.c */,
 				9E5FEB931C04C0B100470D03 /* Map.h */,
 				9E5FEB941C04C0B100470D03 /* MapPATH.h */,
 				9E5FEB951C04C0B100470D03 /* ReadMe.txt */,
 				9E5FEB981C04C16A00470D03 /* MapInput.h */,
 				9E5FEB991C04C16A00470D03 /* MapOutput.h */,
 				9E5FEB971C04C12800470D03 /* MapData.h */,
+				9EA981DB1C0D61B3007B77FA /* MapDataEdges.txt */,
+				9EA981DC1C0D61B3007B77FA /* MapDataVertices.txt */,
 				9E5FEB961C04C0B100470D03 /* Tour.h */,
 			);
 			path = cosi180;
@@ -139,8 +137,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E5FEB921C04C05900470D03 /* Map.c in Sources */,
-				9E7F94B91C0A4D7800C88D1E /* Test.c in Sources */,
-				9E5FEB8B1C04C01900470D03 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
