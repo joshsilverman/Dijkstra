@@ -65,7 +65,8 @@ AList* alist_init(int vertex_count) {
 void alist_add_edge(int i, int j, int edge_i, AList *alist) {
     printf("Adding edge %i -> %i\n", i, j);
     
-    Edge *outgoing_edge = &alist->A[i];
+    Edge *outgoing_edge = malloc(sizeof(Edge));
+    outgoing_edge = &alist->A[i];
     while (outgoing_edge->edge) {
         outgoing_edge = outgoing_edge->edge;
     }
@@ -83,22 +84,22 @@ void alist_add_edge(int i, int j, int edge_i, AList *alist) {
 };
 
 void alist_print(AList *alist) {
-    for (int i = 0; i < (*alist).size; i++) {
+    for (int i = 0; i < alist->size; i++) {
         printf("%s: %i", Vlabel[i], i);
-        edge_print(&(*alist).A[i]);
+        edge_print(&alist->A[i]);
         printf("\n");
     }
 };
 
 void edge_print(Edge *edge) {
-    if (!edge || (*edge).vertex_i == -1) {
+    if (!edge || edge->vertex_i == -1) {
         return;
     } else {
         while (edge) {
-            printf("->%s", Vlabel[(*edge).vertex_i]);
+            printf("->%s", Vlabel[edge->vertex_i]);
             
-            if ((*edge).edge) {
-                edge = (*edge).edge;
+            if (edge->edge) {
+                edge = edge->edge;
             } else {
                 edge = NULL;
             }
@@ -256,9 +257,8 @@ void heap_grow(Heap *H) {
     /*printf("resize\n");*/
     H->size = (H->size + 1) * 2;
     HeapItem *newA;
-    int *newD;
     newA = (HeapItem *)malloc(H->size * sizeof(HeapItem));
-    newD = malloc(H->size * sizeof(int));
+    int newD[H->size];
     
     int i;
     for (i=0; i<H->count; i++) {
@@ -277,7 +277,6 @@ void heap_grow(Heap *H) {
     };
     
     free(H->A);
-    free(H->D);
     H->A = newA;
     H->D = newD;
 };
