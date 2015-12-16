@@ -352,6 +352,7 @@ void Dijkstra(int DijkstraFlag) {
         marked_vertices[v->v_index] = *tmp;
     }
     
+    /*Traverse back references and makes calls to PrintLeg*/
     int edges_indices[151];
     int count = 0;
     v = &marked_vertices[Finish];
@@ -368,13 +369,9 @@ void Dijkstra(int DijkstraFlag) {
     }
     
     for (i=count-1; i>=0; i--) {
-        printf("\nfollow edge %i\n", edges_indices[i]);
         PrintLeg(Eindex[edges_indices[i]]);
     }
 }
-
-
-
 
 /***************************************************************************************/
 /*CAMPUS TOUR                                                                          */

@@ -1,3 +1,9 @@
+Cosi 180 Final Project - Submission
+by Josh Silverman
+
+NOTE: I have not special notes on how to run the Map.c beyond the information provide with the assignment. My Output.txt matches the provided Solutions.txt.
+
+
 http://www.cs.brandeis.edu/~storer/cs180/Assignments/BrandeisMap/Project.html
 
 ___________________________________________________________________
