@@ -65,7 +65,7 @@ void Prim () {
     
     /*Load edges into adjacency list*/
     alist = alist_init(nV);
-    for (i=0; i<nE; i++) {
+    for (i=20; i<nE; i++) {
         alist_add_edge(Estart[i], Eend[i], i, alist);
     }
     

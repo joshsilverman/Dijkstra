@@ -1,3 +1,12 @@
+************* WELCOME TO THE BRANDEIS MAP *************
+Enter start (return to quit): t
+Enter finish (or return to do a tour):
+Have a skateboard (y/n - default=n)?
+Minimize time (y/n - default=n)?
+1. Prim
+2. Triangle optimization of MST
+Selection: 1
+
 FROM: (T) Between Sciences and Library
 ON: Central Campus Walkway
 Walk 278 feet in direction 82 degrees East.
@@ -243,30 +252,6 @@ TO: (A6) Rieger Tennis Courts
 (38 seconds)
 
 FROM: (A6) Rieger Tennis Courts
-ON: Edge Connecting Map Lower Right Corner To A Map Location
-walk 2446 feet in direction 159 degrees South.
-TO: (DDD) Lower Right Corner Of Map
-(9.0 minutes)
-
-FROM: (DDD) Lower Right Corner Of Map
-ON: Map Upper left Corner To Lower Right Corner
-walk 7040 feet in direction 308 degrees NW.
-TO: (AAA) Upper Left Corner of Map
-(25.9 minutes)
-
-FROM: (AAA) Upper Left Corner of Map
-ON: Map Upper left Corner To Lower Right Corner
-walk 7040 feet in direction 128 degrees SE.
-TO: (DDD) Lower Right Corner Of Map
-(25.9 minutes)
-
-FROM: (DDD) Lower Right Corner Of Map
-ON: Edge Connecting Map Lower Right Corner To A Map Location
-walk 2446 feet in direction 339 degrees North.
-TO: (A6) Rieger Tennis Courts
-(9.0 minutes)
-
-FROM: (A6) Rieger Tennis Courts
 Walk 173 feet in direction 280 degrees West.
 TO: (Z) Athletics Driveway Lower Corner
 (38 seconds)
@@ -412,24 +397,9 @@ TO: (U41) Intercultural Center, Swig Hall
 (1.2 minutes)
 
 FROM: (U41) Intercultural Center, Swig Hall
-walk 158 feet in direction 347 degrees North.
-TO: (U42) Hassenfeld-Krivoff Residence Hall
-(35 seconds)
-
-FROM: (U42) Hassenfeld-Krivoff Residence Hall
-walk 158 feet in direction 167 degrees South.
-TO: (U41) Intercultural Center, Swig Hall
-(35 seconds)
-
-FROM: (U41) Intercultural Center, Swig Hall
-walk 169 feet in direction 63 degrees NE.
-TO: (U43) Shapiro Residence Hall
-(37 seconds)
-
-FROM: (U43) Shapiro Residence Hall
-Walk 160 feet in direction 203 degrees SW.
+walk 109 feet in direction 127 degrees SE.
 TO: (U44) Rubenstein-Pomerantz Residence Hall
-(35 seconds)
+(24 seconds)
 
 FROM: (U44) Rubenstein-Pomerantz Residence Hall
 Walk 160 feet in direction 23 degrees NE.
@@ -437,9 +407,24 @@ TO: (U43) Shapiro Residence Hall
 (35 seconds)
 
 FROM: (U43) Shapiro Residence Hall
-walk 169 feet in direction 243 degrees SW.
+Walk 202 feet in direction 290 degrees West.
+TO: (U42) Hassenfeld-Krivoff Residence Hall
+(45 seconds)
+
+FROM: (U42) Hassenfeld-Krivoff Residence Hall
+Walk 202 feet in direction 110 degrees East.
+TO: (U43) Shapiro Residence Hall
+(45 seconds)
+
+FROM: (U43) Shapiro Residence Hall
+Walk 160 feet in direction 203 degrees SW.
+TO: (U44) Rubenstein-Pomerantz Residence Hall
+(35 seconds)
+
+FROM: (U44) Rubenstein-Pomerantz Residence Hall
+walk 109 feet in direction 307 degrees NW.
 TO: (U41) Intercultural Center, Swig Hall
-(37 seconds)
+(24 seconds)
 
 FROM: (U41) Intercultural Center, Swig Hall
 walk 324 feet in direction 203 degrees SW.
@@ -516,18 +501,6 @@ ON: Mandel Rear Access Road
 walk up 147 feet in direction 340 degrees North.
 TO: (U17) Reitman Residence Hall
 (35 seconds)
-
-FROM: (U17) Reitman Residence Hall
-ON: Edge Connecting Map Upper Right Corner To A Map Location
-walk 1225 feet in direction 67 degrees NE.
-TO: (BBB) Upper Right Corner Of Map
-(4.5 minutes)
-
-FROM: (BBB) Upper Right Corner Of Map
-ON: Edge Connecting Map Upper Right Corner To A Map Location
-walk 1225 feet in direction 247 degrees SW.
-TO: (U17) Reitman Residence Hall
-(4.5 minutes)
 
 FROM: (U17) Reitman Residence Hall
 ON: Mandel Rear Access Road
@@ -736,6 +709,16 @@ TO: (0) Mandel Quad
 (18 seconds)
 
 FROM: (0) Mandel Quad
+walk 121 feet in direction 308 degrees NW.
+TO: (U11) Golding Judaic Center
+(27 seconds)
+
+FROM: (U11) Golding Judaic Center
+walk 121 feet in direction 128 degrees SE.
+TO: (0) Mandel Quad
+(27 seconds)
+
+FROM: (0) Mandel Quad
 walk 167 feet in direction 106 degrees East.
 TO: (U13) Shiffman Humanities Center
 (37 seconds)
@@ -756,16 +739,6 @@ TO: (0) Mandel Quad
 (33 seconds)
 
 FROM: (0) Mandel Quad
-walk 121 feet in direction 308 degrees NW.
-TO: (U11) Golding Judaic Center
-(27 seconds)
-
-FROM: (U11) Golding Judaic Center
-walk 121 feet in direction 128 degrees SE.
-TO: (0) Mandel Quad
-(27 seconds)
-
-FROM: (0) Mandel Quad
 Walk down 314 feet in direction 246 degrees SW.
 TO: (1) Loop Road By Mandel Center"
 (1.0 minutes)
@@ -777,34 +750,24 @@ TO: ($) Tower Lot
 (1.0 minutes)
 
 FROM: ($) Tower Lot
-walk 258 feet in direction 199 degrees South.
-TO: (U8) Heller School Heller-Brown Building
-(57 seconds)
-
-FROM: (U8) Heller School Heller-Brown Building
-walk 258 feet in direction 19 degrees North.
-TO: ($) Tower Lot
-(57 seconds)
-
-FROM: ($) Tower Lot
 walk 337 feet in direction 234 degrees SW.
 TO: (U5) Heller School Schneider Building
 (1.2 minutes)
 
 FROM: (U5) Heller School Schneider Building
+walk 156 feet in direction 299 degrees NW.
+TO: (U6) Mandel Center for Studies in Jewish Education
+(34 seconds)
+
+FROM: (U6) Mandel Center for Studies in Jewish Education
+walk 156 feet in direction 119 degrees SE.
+TO: (U5) Heller School Schneider Building
+(34 seconds)
+
+FROM: (U5) Heller School Schneider Building
 walk 114 feet in direction 11 degrees North.
 TO: (U7) Abraham Shapiro Academic Complex
 (25 seconds)
-
-FROM: (U7) Abraham Shapiro Academic Complex
-walk 162 feet in direction 257 degrees West.
-TO: (U6) Mandel Center for Studies in Jewish Education
-(36 seconds)
-
-FROM: (U6) Mandel Center for Studies in Jewish Education
-walk 162 feet in direction 77 degrees East.
-TO: (U7) Abraham Shapiro Academic Complex
-(36 seconds)
 
 FROM: (U7) Abraham Shapiro Academic Complex
 walk 114 feet in direction 191 degrees South.
@@ -815,6 +778,16 @@ FROM: (U5) Heller School Schneider Building
 walk 337 feet in direction 54 degrees NE.
 TO: ($) Tower Lot
 (1.2 minutes)
+
+FROM: ($) Tower Lot
+walk 258 feet in direction 199 degrees South.
+TO: (U8) Heller School Heller-Brown Building
+(57 seconds)
+
+FROM: (U8) Heller School Heller-Brown Building
+walk 258 feet in direction 19 degrees North.
+TO: ($) Tower Lot
+(57 seconds)
 
 FROM: ($) Tower Lot
 ON: Tower Lot Driveway
@@ -1020,18 +993,6 @@ TO: (L36) May, Lewis, Coffman, and Cohen Residence Halls
 (1.5 minutes)
 
 FROM: (L36) May, Lewis, Coffman, and Cohen Residence Halls
-ON: Edge Connecting Map Lower Left Corner To A Map Location
-walk 1408 feet in direction 209 degrees SW.
-TO: (CCC) Lower Left Corner Of Map
-(5.2 minutes)
-
-FROM: (CCC) Lower Left Corner Of Map
-ON: Edge Connecting Map Lower Left Corner To A Map Location
-walk 1408 feet in direction 29 degrees NE.
-TO: (L36) May, Lewis, Coffman, and Cohen Residence Halls
-(5.2 minutes)
-
-FROM: (L36) May, Lewis, Coffman, and Cohen Residence Halls
 ON: South Street
 walk 414 feet in direction 34 degrees NE.
 TO: (L35) 567 South Street Apartments
@@ -1124,16 +1085,6 @@ TO: (E) Ziv Quad
 (1.1 minutes)
 
 FROM: (E) Ziv Quad
-walk 248 feet in direction 231 degrees SW.
-TO: (L31) Ziv Residence Hall B
-(55 seconds)
-
-FROM: (L31) Ziv Residence Hall B
-walk 248 feet in direction 51 degrees NE.
-TO: (E) Ziv Quad
-(55 seconds)
-
-FROM: (E) Ziv Quad
 walk 257 feet in direction 186 degrees South.
 TO: (L32) Mazer Residence Hall
 (57 seconds)
@@ -1142,6 +1093,16 @@ FROM: (L32) Mazer Residence Hall
 walk 257 feet in direction 6 degrees North.
 TO: (E) Ziv Quad
 (57 seconds)
+
+FROM: (E) Ziv Quad
+walk 248 feet in direction 231 degrees SW.
+TO: (L31) Ziv Residence Hall B
+(55 seconds)
+
+FROM: (L31) Ziv Residence Hall B
+walk 248 feet in direction 51 degrees NE.
+TO: (E) Ziv Quad
+(55 seconds)
 
 FROM: (E) Ziv Quad
 walk 200 feet in direction 137 degrees SE.
@@ -1596,4 +1557,4 @@ Walk 118 feet in direction 261 degrees West.
 TO: (T) Between Sciences and Library
 (26 seconds)
 
-legs = 300, distance = 20.5 miles, time = 400.1 minutes
+legs = 292, distance = 15.9 miles, time = 310.8 minutes
