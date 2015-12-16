@@ -13,6 +13,12 @@ Part 2A
 
 I implemented Prim using the adjaceny list for the graph. I made the heap/dictionary structure more general so it can now be used to do operations on both vertices (time/distance from origin to vertex) and edges (edge weight).
 
+OutputPrim.txt is a tour using Prim's algorithm.
+
+2B
+
+
+
 http://www.cs.brandeis.edu/~storer/cs180/Assignments/BrandeisMap/Project.html
 
 ___________________________________________________________________

@@ -4,6 +4,8 @@
 void add_edges_to_heap(AList *alist, Heap *E, int i);
 void spanning_tree_tour(AList *spanning_tree, int start);
 int get_inverse_edge(AList * alist, int i);
+void Prim();
+void Triangle();
 
 AList *alist;       /*Make adjacency graph available to helper methods*/
 
@@ -58,7 +60,7 @@ int get_inverse_edge(AList *alist, int i) {
     return -1;
 }
 
-void Tour () {
+void Prim () {
     int i, v, w;
     
     /*Load edges into adjacency list*/
@@ -101,6 +103,23 @@ void Tour () {
     }
     
     /*Traverse spanning tree*/
-    alist_print(spanning_tree);
     spanning_tree_tour(spanning_tree, Begin);
+}
+
+void Triangle() {
+    
+}
+
+void Tour () {
+    char s[MaxString];
+    
+    printf("1. Prim\n");
+    printf("2. Triangle optimization of MST\n");
+    printf("Selection: ");
+    fflush(stdout); fgets(s,MaxString,stdin);
+    if (s[0] == '1') {
+        Prim();
+    } else if (s[0] == '2') {
+        Triangle();
+    }
 }
